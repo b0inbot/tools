@@ -1,0 +1,21 @@
+module(
+  name = "boinsoft_tools",
+  version = "0.1.0",
+)
+
+###
+###
+###
+bazel_dep(name = "rules_jvm_external", version = "6.6")
+
+maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
+maven.install(
+    name = "boinsoft_tools_maven",
+    artifacts = [
+         # START-pom.xml
+        "io.vavr:vavr:0.10.4",
+         # END-pom.xml
+    ],
+    strict_visibility = True,
+)
+use_repo(maven, "boinsoft_tools_maven")
