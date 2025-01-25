@@ -1,7 +1,10 @@
 load("@boinsoft_tools//private:artifact.bzl", artifact = "tools_artifact")
 #load("@contrib_rules_jvm//java:defs.bzl", "java_junit5_test", "java_test_suite")
 
-exports_files(["one.zip", "two.zip"])
+exports_files([
+    "one.zip",
+    "two.zip",
+])
 
 java_library(
     name = "zip_overlay-lib",
@@ -13,6 +16,7 @@ java_library(
     visibility = ["//visibility:public"],
     deps = [
         artifact("io.vavr:vavr"),
+        artifact("commons-cli:commons-cli"),
     ],
 )
 
@@ -34,9 +38,12 @@ java_test(
         "--select-class",
         "boinsoft.tools.zip_overlay.ManyZipEntryStreamTests",
     ],
+    data = [
+        ":one.zip",
+        ":two.zip",
+    ],
     main_class = "org.junit.platform.console.ConsoleLauncher",
     test_class = "boinsoft.tools.zip_overlay.ManyZipEntryStreamTests",
-    data = [ ":one.zip", ":two.zip" ],
     runtime_deps = [
         ":zip_overlay-lib",
         ":zip_overlay-tests",

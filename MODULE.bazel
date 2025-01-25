@@ -17,6 +17,7 @@ maven.install(
     name = "boinsoft_tools_maven",
     artifacts = [
         "io.vavr:vavr:0.10.4",
+        "commons-cli:commons-cli:1.9.0",
         "org.junit.jupiter:junit-jupiter-api:%s" % JUNIT_JUPITER_VERSION,
         "org.junit.platform:junit-platform-launcher:%s" % JUNIT_PLATFORM_VERSION,
         "org.junit.platform:junit-platform-console:%s" % JUNIT_PLATFORM_VERSION,
