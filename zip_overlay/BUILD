@@ -17,6 +17,7 @@ java_library(
     deps = [
         artifact("io.vavr:vavr"),
         artifact("commons-cli:commons-cli"),
+        "@boinsoft_tools//cli:cli-lib",
     ],
 )
 
