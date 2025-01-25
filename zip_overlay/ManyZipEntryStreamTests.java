@@ -1,6 +1,6 @@
 package boinsoft.tools.zip_overlay;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
@@ -25,7 +25,34 @@ public class ManyZipEntryStreamTests {
   }
 
   @Test
-  public void testSingle() {
-    // TODO: build or find zip
+  public void testMultiple() throws IOException {
+    try (var z =
+        new ManyZipEntryStream(
+            List.of(Path.of("zip_overlay/one.zip"), Path.of("zip_overlay/two.zip")))) {
+      var l = z.stream().toList();
+      assertNotNull(l);
+      assertEquals(4, l.size());
+      assertEquals("a/", l.get(0).name());
+      assertEquals("a/1", l.get(1).name());
+      assertEquals("a/", l.get(2).name());
+      assertEquals("a/2", l.get(3).name());
+    }
+  }
+
+  @Test
+  public void testMultipleDedup() throws IOException {
+    var opts = new ManyZipEntryStream.Options();
+    opts.dedupFolders = true;
+
+    try (var z =
+        new ManyZipEntryStream(
+            List.of(Path.of("zip_overlay/one.zip"), Path.of("zip_overlay/two.zip")), opts)) {
+      var l = z.stream().toList();
+      assertNotNull(l);
+      assertEquals(3, l.size());
+      assertEquals("a/", l.get(0).name());
+      assertEquals("a/1", l.get(1).name());
+      assertEquals("a/2", l.get(2).name());
+    }
   }
 }

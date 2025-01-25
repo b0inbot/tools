@@ -15,8 +15,18 @@ import java.util.zip.*;
  */
 class ManyZipEntryStream implements AutoCloseable {
   List<ZipFile> inputs;
+  Options options;
+
+  static class Options {
+    public boolean dedupFolders = false;
+  }
 
   public ManyZipEntryStream(List<Path> paths) throws IOException {
+    this(paths, new Options());
+  }
+
+  public ManyZipEntryStream(List<Path> paths, Options options) throws IOException {
+    this.options = options;
     this.inputs =
         paths.stream()
             .map(Path::toFile)
@@ -27,7 +37,20 @@ class ManyZipEntryStream implements AutoCloseable {
   }
 
   public Stream<ReadableZipEntry> stream() throws IOException {
-    return this.inputs.stream().flatMap(ManyZipEntryStream::fromZipFile);
+    var x = this.inputs.stream().flatMap(ManyZipEntryStream::fromZipFile);
+    if (this.options.dedupFolders) {
+      Set<String> folders = new HashSet<>();
+      x =
+          x.filter(
+              f -> {
+                if (f.isDirectory()) {
+                  return folders.add(f.name());
+                } else {
+                  return true;
+                }
+              });
+    }
+    return x;
   }
 
   protected static Stream<ReadableZipEntry> fromZipFile(ZipFile zf) {
