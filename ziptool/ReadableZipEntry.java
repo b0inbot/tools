@@ -1,4 +1,4 @@
-package boinsoft.tools.zip_overlay;
+package boinsoft.tools.ziptool;
 
 import java.io.IOException;
 import java.io.InputStream;

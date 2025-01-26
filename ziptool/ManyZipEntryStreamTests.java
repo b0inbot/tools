@@ -1,4 +1,4 @@
-package boinsoft.tools.zip_overlay;
+package boinsoft.tools.ziptool;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,8 +27,7 @@ public class ManyZipEntryStreamTests {
   @Test
   public void testMultiple() throws IOException {
     try (var z =
-        new ManyZipEntryStream(
-            List.of(Path.of("zip_overlay/one.zip"), Path.of("zip_overlay/two.zip")))) {
+        new ManyZipEntryStream(List.of(Path.of("ziptool/one.zip"), Path.of("ziptool/two.zip")))) {
       var l = z.stream().toList();
       assertNotNull(l);
       assertEquals(4, l.size());
@@ -46,7 +45,7 @@ public class ManyZipEntryStreamTests {
 
     try (var z =
         new ManyZipEntryStream(
-            List.of(Path.of("zip_overlay/one.zip"), Path.of("zip_overlay/two.zip")), opts)) {
+            List.of(Path.of("ziptool/one.zip"), Path.of("ziptool/two.zip")), opts)) {
       var l = z.stream().toList();
       assertNotNull(l);
       assertEquals(3, l.size());

@@ -1,4 +1,4 @@
-package boinsoft.tools.zip_overlay;
+package boinsoft.tools.ziptool;
 
 import boinsoft.tools.cli.CLI;
 import boinsoft.tools.cli.SimpleCLI;
@@ -21,7 +21,7 @@ import org.apache.commons.cli.Options;
  *
  * <p>Usage:
  *
- * <p>zip_overlay output.jar layer1.zip layer2.zip layer3.zip
+ * <p>ziptool overlay output.jar layer1.zip layer2.zip layer3.zip
  */
 public class ZipOverlay implements SimpleCLI<ZipOverlay.CLIOptions> {
 
@@ -33,9 +33,10 @@ public class ZipOverlay implements SimpleCLI<ZipOverlay.CLIOptions> {
 
   @Override
   public String usageLine() {
-    return "zip_overlay <flags> <output> <input> <input> ...";
+    return "ziptool overlay <flags> <output> <input> <input> ...";
   }
 
+  @Override
   public Try<Integer> recoverPipeline(Try<Integer> t) {
     return t.recover(
             java.nio.file.NoSuchFileException.class,

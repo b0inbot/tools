@@ -1,4 +1,4 @@
-package boinsoft.tools.zip_overlay;
+package boinsoft.tools.ziptool;
 
 import io.vavr.control.*;
 import java.io.*;

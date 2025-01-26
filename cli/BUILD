@@ -3,9 +3,10 @@ load("@boinsoft_tools//private:artifact.bzl", artifact = "tools_artifact")
 java_library(
     name = "cli-lib",
     srcs = [
-        "SimpleCLI.java",
+        "Args.java",
         "CLI.java",
-	"UsageException.java",
+        "SimpleCLI.java",
+        "UsageException.java",
     ],
     visibility = ["//visibility:public"],
     deps = [
