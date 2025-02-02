@@ -25,6 +25,7 @@ maven.install(
         "org.junit.jupiter:junit-jupiter-api:%s" % JUNIT_JUPITER_VERSION,
         "org.junit.jupiter:junit-jupiter-params:%s" % JUNIT_JUPITER_VERSION,
         "org.junit.jupiter:junit-jupiter-engine:%s" % JUNIT_JUPITER_VERSION,
+        "org.dom4j:dom4j:2.1.4",
     ],
     strict_visibility = True,
 )
