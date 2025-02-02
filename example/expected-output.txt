@@ -1,0 +1,6 @@
+Archive:  ZIP
+    testing: a/                       OK
+    testing: a/1                      OK
+    testing: a/2                      OK
+No errors detected in compressed data of ZIP.
+test of ZIP OK
