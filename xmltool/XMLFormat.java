@@ -1,5 +1,6 @@
 package boinsoft.tools.xmltool;
 
+import boinsoft.tools.cli.CLI;
 import boinsoft.tools.cli.SimpleCLI;
 import boinsoft.tools.cli.UsageException;
 import io.vavr.control.Try;
@@ -9,6 +10,7 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.function.Function;
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.dom4j.Document;
 import org.dom4j.io.OutputFormat;
@@ -67,7 +69,9 @@ public class XMLFormat implements SimpleCLI<XMLFormat.CLIOptions> {
   }
 
   @Override
-  public void options(Options options) {}
+  public void options(Options options) {
+    options.addOption(Option.builder("write").longOpt("write").desc("no-op").build());
+  }
 
   @Override
   public void run(CLIOptions cliopts) throws Exception {
@@ -97,5 +101,9 @@ public class XMLFormat implements SimpleCLI<XMLFormat.CLIOptions> {
     XMLWriter writer = new XMLWriter(w, format);
 
     writer.write(document);
+  }
+
+  public static void main(String[] args) throws Exception {
+    CLI.invoke(new XMLFormat(), args);
   }
 }

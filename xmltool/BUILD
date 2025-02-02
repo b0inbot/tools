@@ -36,3 +36,12 @@ java_binary(
         ":xmltool-lib",
     ],
 )
+
+java_binary(
+    name = "xmlformat",
+    main_class = "boinsoft.tools.xmltool.XMLFormat",
+    visibility = ["//visibility:public"],
+    runtime_deps = [
+        ":xmltool-lib",
+    ],
+)
