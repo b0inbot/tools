@@ -8,7 +8,6 @@ import java.io.*;
 import java.net.*;
 import java.nio.file.*;
 import java.util.*;
-import java.util.function.Function;
 import java.util.jar.*;
 import java.util.stream.*;
 import java.util.zip.*;
@@ -53,27 +52,25 @@ public class ZipOverlay implements SimpleCLI<ZipOverlay.CLIOptions> {
   }
 
   @Override
-  public Function<CommandLine, Try<CLIOptions>> converter() {
-    return (cl -> {
-      var dedupFolders = cl.hasOption("dedup-folders");
+  public Try<CLIOptions> convert(CommandLine cl) {
+    var dedupFolders = cl.hasOption("dedup-folders");
 
-      var files = cl.getArgList();
-      if (files.size() == 0) {
-        return Try.failure(new UsageException("No files provided"));
-      }
-      var dest = Path.of(files.get(0));
+    var files = cl.getArgList();
+    if (files.size() == 0) {
+      return Try.failure(new UsageException("No files provided"));
+    }
+    var dest = Path.of(files.get(0));
 
-      List<Path> inputs = new LinkedList<>();
-      for (int x = 1; x != files.size(); x++) {
-        inputs.add(Path.of(files.get(x)));
-      }
+    List<Path> inputs = new LinkedList<>();
+    for (int x = 1; x != files.size(); x++) {
+      inputs.add(Path.of(files.get(x)));
+    }
 
-      var opts = new CLIOptions();
-      opts.inputs = inputs;
-      opts.dedupFolders = dedupFolders;
-      opts.output = dest;
-      return Try.success(opts);
-    });
+    var opts = new CLIOptions();
+    opts.inputs = inputs;
+    opts.dedupFolders = dedupFolders;
+    opts.output = dest;
+    return Try.success(opts);
   }
 
   @Override

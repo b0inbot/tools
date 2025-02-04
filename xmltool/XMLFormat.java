@@ -8,7 +8,6 @@ import java.io.*;
 import java.net.*;
 import java.nio.file.*;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
@@ -53,18 +52,16 @@ public class XMLFormat implements SimpleCLI<XMLFormat.CLIOptions> {
   }
 
   @Override
-  public Function<CommandLine, Try<CLIOptions>> converter() {
-    return (cl -> {
-      var files = cl.getArgList();
-      if (files.size() == 0) {
-        return Try.failure(new UsageException("No files provided"));
-      }
-      var inputs = files.stream().map(s -> Path.of(s)).collect(Collectors.toList());
+  public Try<CLIOptions> convert(CommandLine cl) {
+    var files = cl.getArgList();
+    if (files.size() == 0) {
+      return Try.failure(new UsageException("No files provided"));
+    }
+    var inputs = files.stream().map(s -> Path.of(s)).collect(Collectors.toList());
 
-      var opts = new CLIOptions();
-      opts.inputs = inputs;
-      return Try.success(opts);
-    });
+    var opts = new CLIOptions();
+    opts.inputs = inputs;
+    return Try.success(opts);
   }
 
   @Override

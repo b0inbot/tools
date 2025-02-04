@@ -1,7 +1,6 @@
 package boinsoft.tools.cli;
 
 import io.vavr.control.Try;
-import java.util.function.Function;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -23,34 +22,32 @@ public class CLI {
     var options = new Options();
     cli.defaultOptions(options);
     cli.options(options);
-    Function<CommandLine, Try<T>> converter = cli.converter();
 
-    var x =
-        parse(options, args)
-            .flatMapTry(
-                cl -> {
-                  if (cl.hasOption("help")) {
-                    printHelp(cli, options);
-                    throw new CLI.CLIInterrupt();
-                  }
-                  return converter.apply(cl);
-                })
-            .mapTry(
-                t -> {
-                  cli.run(t);
-                  return 0;
-                })
-            .recover(CLI.CLIInterrupt.class, (exn) -> 1)
-            .recover(
-                UsageException.class,
-                (exn) -> {
-                  System.err.println(exn.getMessage());
-                  printHelp(cli, options);
-                  return 1;
-                });
-    x = cli.recoverPipeline(x);
-    var res = x.get();
-    System.exit(res);
+    System.exit(
+        cli.recoverPipeline(
+                parse(options, args)
+                    .flatMapTry(
+                        cl -> {
+                          if (cl.hasOption("help")) {
+                            printHelp(cli, options);
+                            throw new CLI.CLIInterrupt();
+                          }
+                          return cli.convert(cl);
+                        })
+                    .mapTry(
+                        c -> {
+                          cli.run(c);
+                          return (Integer) 0;
+                        })
+                    .recover(CLI.CLIInterrupt.class, (exn) -> 1)
+                    .recover(
+                        UsageException.class,
+                        (exn) -> {
+                          System.err.println(exn.getMessage());
+                          printHelp(cli, options);
+                          return (Integer) 1;
+                        }))
+            .get());
   }
 
   static <T> void printHelp(SimpleCLI<T> cli, Options options) {
