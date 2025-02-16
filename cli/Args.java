@@ -1,7 +1,7 @@
 package boinsoft.tools.cli;
 
 import io.vavr.control.Try;
-import java.util.List;
+import java.util.Collection;
 
 public class Args {
   private String[] args_;
@@ -19,12 +19,14 @@ public class Args {
     return this.args_[(this.idx_++)];
   }
 
-  public Try<String> choices(List<String> ch) {
+  public Try<String> choices(Collection<String> ch) {
     var i = shift();
     if (ch.stream().filter(c -> i.equals(c)).findFirst().isPresent()) {
       return Try.success(i);
     } else {
-      return Try.failure(new UsageException("item not in choices"));
+      return Try.failure(
+          new UsageException(
+              String.format("argument '%s' not in choices: '%s'", i, String.join(",", ch))));
     }
   }
 

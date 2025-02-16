@@ -5,6 +5,7 @@ java_library(
     srcs = [
         "Args.java",
         "CLI.java",
+        "MultiCommand.java",
         "SimpleCLI.java",
         "UsageException.java",
     ],
