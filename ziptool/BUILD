@@ -1,4 +1,7 @@
 load("@boinsoft_tools//private:artifact.bzl", artifact = "tools_artifact")
+load("@rules_java//java:java_binary.bzl", "java_binary")
+load("@rules_java//java:java_library.bzl", "java_library")
+load("@rules_java//java:java_test.bzl", "java_test")
 
 exports_files([
     "one.zip",

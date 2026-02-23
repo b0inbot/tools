@@ -1,4 +1,5 @@
 load("@boinsoft_tools//:rules/ziptool.bzl", "ziptool")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
 
 ziptool.overlay(
     name = "out",

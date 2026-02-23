@@ -58,6 +58,6 @@ class ManyZipEntryStream implements AutoCloseable {
   }
 
   public void close() throws IOException {
-    this.inputs.stream().map(Try::success).map(x -> x.andThenTry(f -> f.close())).toList();
+    this.inputs.stream().map(Try::success).forEach(x -> x.andThenTry(f -> f.close()));
   }
 }

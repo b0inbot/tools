@@ -6,7 +6,7 @@ module(
 ###
 ###
 ###
-bazel_dep(name = "aspect_rules_lint", version = "1.0.9")
+bazel_dep(name = "aspect_rules_lint", version = "2.2.0")
 
 http_jar = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_jar")
 
@@ -28,7 +28,9 @@ bazel_dep(
 ###
 ###
 ###
-bazel_dep(name = "rules_jvm_external", version = "6.6")
+bazel_dep(name = "rules_java", version = "9.3.0")
+bazel_dep(name = "rules_jvm_external", version = "6.9")
+bazel_dep(name = "rules_shell", version = "0.6.1")
 
 JUNIT_JUPITER_VERSION = "5.11.3"
 

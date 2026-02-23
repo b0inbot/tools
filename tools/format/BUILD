@@ -1,4 +1,5 @@
 load("@aspect_rules_lint//format:defs.bzl", "format_multirun")
+load("@rules_java//java:java_binary.bzl", "java_binary")
 
 package(default_visibility = ["//:__pkg__"])
 
