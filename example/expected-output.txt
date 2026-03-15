@@ -1,6 +1,8 @@
+	zip warning: undefined bits used in flags = 0x0808: a/file1
+	zip warning: undefined bits used in flags = 0x0808: a/file2
 Archive:  ZIP
     testing: a/                       OK
-    testing: a/1                      OK
-    testing: a/2                      OK
+    testing: a/file1                  OK
+    testing: a/file2                  OK
 No errors detected in compressed data of ZIP.
 test of ZIP OK

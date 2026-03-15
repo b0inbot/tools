@@ -17,8 +17,30 @@ class ManyZipEntryStream implements AutoCloseable {
   List<ZipFile> inputs;
   Options options;
 
+  static class ZFile {
+    final ReadableZipEntry file;
+
+    public ZFile(ReadableZipEntry f) {
+      this.file = f;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (other instanceof ZFile) {
+        return ((ZFile) other).file.name().equals(file.name());
+      }
+      return false;
+    }
+
+    @Override
+    public int hashCode() {
+      return file.name().hashCode();
+    }
+  }
+
   static class Options {
     public boolean dedupFolders = false;
+    public String dedupFileStrategy = "ignore";
   }
 
   public ManyZipEntryStream(List<Path> paths) throws IOException {
@@ -34,9 +56,10 @@ class ManyZipEntryStream implements AutoCloseable {
             .map(p -> p.mapTry(f -> new ZipFile(f)))
             .map(Try::get)
             .toList();
+    return;
   }
 
-  public Stream<ReadableZipEntry> stream() throws IOException {
+  public Stream<Try<ReadableZipEntry>> stream() throws IOException {
     var x = this.inputs.stream().flatMap(ManyZipEntryStream::fromZipFile);
     if (this.options.dedupFolders) {
       Set<String> folders = new HashSet<>();
@@ -50,7 +73,31 @@ class ManyZipEntryStream implements AutoCloseable {
                 }
               });
     }
-    return x;
+
+    var strategy = this.options.dedupFileStrategy;
+    if (!strategy.equalsIgnoreCase("ignore")) {
+      Set<ZFile> files = new HashSet<>();
+      return x.map(
+          f ->
+              Try.of(
+                  () -> {
+                    if (f.isDirectory()) {
+                      return f;
+                    } else {
+                      var added = files.add(new ZFile(f));
+                      if (!added) {
+                        if (strategy.equalsIgnoreCase("fail")) {
+                          throw new Exception("Duplicate entry " + f.name());
+                        }
+                        // TODO: implement newest-first, oldest-first,
+                        // biggest-first, smallest-first, fail-on-file-contents-diff
+                      }
+                      return f;
+                    }
+                  }));
+    }
+
+    return x.map(Try::success);
   }
 
   protected static Stream<ReadableZipEntry> fromZipFile(ZipFile zf) {

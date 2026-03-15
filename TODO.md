@@ -5,3 +5,6 @@
  * [DONE] Move common cli code into cli/ folder. this will be commons cli and vavr together
  * [DONE] Add integration tests for ziptool overlay java and skylark code
  * Add tests for xmlformat
+ * [WIP] allow configurable handling of duplicate entries
+ * [TODO] migrate classpath directory scanning utility into this file.
+ * [TODO] add (optional) JavaInfo onto ziptool.overlay

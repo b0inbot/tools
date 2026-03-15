@@ -2,6 +2,7 @@ package boinsoft.tools.ziptool;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import io.vavr.control.Try;
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
@@ -28,7 +29,7 @@ public class ManyZipEntryStreamTests {
   public void testMultiple() throws IOException {
     try (var z =
         new ManyZipEntryStream(List.of(Path.of("ziptool/one.zip"), Path.of("ziptool/two.zip")))) {
-      var l = z.stream().toList();
+      var l = z.stream().map(Try::get).toList();
       assertNotNull(l);
       assertEquals(4, l.size());
       assertEquals("a/", l.get(0).name());
@@ -46,12 +47,32 @@ public class ManyZipEntryStreamTests {
     try (var z =
         new ManyZipEntryStream(
             List.of(Path.of("ziptool/one.zip"), Path.of("ziptool/two.zip")), opts)) {
-      var l = z.stream().toList();
+      var l = z.stream().map(Try::get).toList();
       assertNotNull(l);
       assertEquals(3, l.size());
       assertEquals("a/", l.get(0).name());
       assertEquals("a/1", l.get(1).name());
       assertEquals("a/2", l.get(2).name());
     }
+  }
+
+  @Test
+  public void testDedupFiles() throws IOException {
+    var opts = new ManyZipEntryStream.Options();
+    opts.dedupFileStrategy = "fail";
+    var exn =
+        assertThrowsExactly(
+            Exception.class,
+            () -> {
+              var z =
+                  new ManyZipEntryStream(
+                      List.of(
+                          Path.of("ziptool/one.zip"),
+                          Path.of("ziptool/two.zip"),
+                          Path.of("ziptool/three.zip")),
+                      opts);
+              var l = z.stream().map(Try::get).toList();
+            });
+    assertEquals(exn.getMessage(), "Duplicate entry a/1");
   }
 }

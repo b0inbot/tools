@@ -93,7 +93,7 @@ public class ZipOverlay implements SimpleCLI<ZipOverlay.CLIOptions> {
         var in = new ManyZipEntryStream(cliopts.inputs, opts)) {
       // TODO: test results
       in.stream()
-          .map((rze) -> Try.success(null).andThenTry(() -> copyEntry(out, rze)))
+          .map((tryrze) -> tryrze.andThenTry((rze) -> copyEntry(out, rze)))
           .forEach(Try::get);
     }
   }
