@@ -84,8 +84,6 @@ public class ZipOverlay implements SimpleCLI<ZipOverlay.CLIOptions> {
 
   @Override
   public void run(CLIOptions cliopts) throws Exception {
-    info("zipoverlay");
-
     var opts = new ManyZipEntryStream.Options();
     opts.dedupFolders = cliopts.dedupFolders;
 
@@ -96,10 +94,6 @@ public class ZipOverlay implements SimpleCLI<ZipOverlay.CLIOptions> {
           .map((tryrze) -> tryrze.andThenTry((rze) -> copyEntry(out, rze)))
           .forEach(Try::get);
     }
-  }
-
-  public static void info(String msg) {
-    System.err.printf("[INFO] %s\n", msg);
   }
 
   public static void warn(String msg) {
